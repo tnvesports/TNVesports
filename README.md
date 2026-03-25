@@ -1,16 +1,554 @@
-## Hi there 👋
 
-<!--
-**tnvesports/TNVesports** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TNVESPORTS</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
 
-Here are some ideas to get you started:
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg-dark: #0f0f13; --surface-card: #1c1c24; --primary: #ff3333; --primary-glow: rgba(255, 51, 51, 0.3); --text-main: #ffffff; --text-sub: #a0a0b0; --success: #00e676; --warning: #ffaa00; --info: #00bfff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
+        ::-webkit-scrollbar { display: none; }
+        
+        #customToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--success); color: white; padding: 12px 25px; border-radius: 25px; font-size: 13px; font-weight: bold; z-index: 999999; box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: none; text-align: center; min-width: 250px; animation: popUp 0.3s ease; }
+        @keyframes popUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+        /* Auth */
+        #authScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: var(--bg-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .auth-box { background: rgba(28, 28, 36, 0.95); backdrop-filter: blur(15px); padding: 40px 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.05); }
+        .auth-logo { font-size: 28px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 5px; letter-spacing: 2px; }
+        .auth-sub { text-align: center; font-size: 12px; color: var(--text-sub); margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-sub); }
+        .auth-input { width: 100%; padding: 15px 15px 15px 45px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 14px; outline: none; transition: 0.3s; }
+        .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .btn-main { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px var(--primary-glow); display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-main:active { transform: scale(0.96); }
+        .auth-switch { text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 20px; cursor: pointer; }
+        .auth-switch span { color: var(--primary); font-weight: 600; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-outline:active { background: var(--primary-glow); }
+
+        /* Main App Layout (SCROLL FIX ADDED) */
+        #mainApp { display: none; min-height: 100vh; padding-bottom: 120px; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(28, 28, 36, 0.95); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .app-logo-img { height: 30px; border-radius: 5px; display: none; }
+        .app-logo-text { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .wallet-pill { background: rgba(255, 170, 0, 0.1); color: var(--warning); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; border: 1px solid rgba(255, 170, 0, 0.3); display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .live-view { font-size: 11px; font-weight: bold; background: rgba(0,230,118,0.1); color: var(--success); padding: 4px 8px; border-radius: 10px; border: 1px solid var(--success); display: flex; align-items: center; gap: 5px; }
+
+        .app-section { display: none; animation: slideUp 0.3s ease; }
+        .app-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Home Components */
+        .banner-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 20px; scroll-behavior: smooth;}
+        .banner-card { min-width: 90%; height: 160px; border-radius: 16px; background-color: var(--surface-card); scroll-snap-align: center; background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: transform 0.3s;}
+        .banner-card:active { transform: scale(0.98); }
+        .section-title { padding: 0 20px; font-size: 16px; font-weight: 700; margin: 10px 0 15px; color: white; display: flex; align-items: center; gap: 8px;}
+        .section-title i { color: var(--primary); }
+        .match-tabs { display: flex; margin: 0 20px 15px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 5px; border: 1px solid rgba(255,255,255,0.05); }
+        .tab-btn { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: 600; color: var(--text-sub); border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px var(--primary-glow); }
+        .games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px; }
+        .game-card { background: var(--surface-card); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; position: relative; }
+        .game-card:active { transform: scale(0.95); }
+        .game-img { height: 110px; background-size: cover; background-position: center; background-color: #2a2a35; }
+        .game-name { padding: 8px; text-align: center; font-size: 12px; font-weight: 600; background: rgba(0,0,0,0.6); color: white; position: absolute; bottom: 0; width: 100%; backdrop-filter: blur(5px);}
+
+        /* Match Cards */
+        .match-card { background: var(--surface-card); margin: 0 20px 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; position: relative;}
+        .match-header { background: rgba(0,0,0,0.2); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .match-title { font-weight: 700; font-size: 14px; color: var(--primary); }
+        .match-time { font-size: 11px; color: var(--text-sub); }
+        .match-stats { display: flex; padding: 15px; gap: 10px; }
+        .stat-box { flex: 1; text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.02); }
+        .stat-val { font-size: 14px; font-weight: 800; color: white; margin-bottom: 2px;}
+        .stat-lbl { font-size: 10px; color: var(--text-sub); }
+        .match-footer { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.02); }
+        .progress-container { width: 120px; background: rgba(255,255,255,0.1); border-radius: 10px; height: 6px; overflow: hidden; margin-top: 5px; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 10px; transition: width 0.3s; }
+        .btn-join { background: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 700; font-size: 12px; border: none; cursor: pointer; box-shadow: 0 4px 10px var(--primary-glow); transition: 0.2s;}
+        .btn-join:active { transform: scale(0.95); }
+        
+        #categoryMatchesScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 1000; overflow-y: auto; padding-bottom: 100px; animation: slideInRight 0.3s; }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        /* Bottom Nav & Fab */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(28, 28, 36, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-between; padding: 12px 20px 20px; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; color: var(--text-sub); font-size: 9px; font-weight: 500; gap: 5px; cursor: pointer; transition: 0.3s; }
+        .nav-item i { font-size: 18px; transition: 0.3s;}
+        .nav-item.active { color: var(--primary); }
+        .nav-item.active i { transform: translateY(-4px); text-shadow: 0 5px 10px var(--primary-glow); }
+        
+        .floating-wa { position: fixed; bottom: 90px; right: 20px; background: #25D366; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 28px; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5); z-index: 9999; cursor: pointer; transition: 0.3s; text-decoration: none;}
+        .floating-wa:active { transform: scale(0.9); }
+
+        /* Profile & Wallet UI */
+        .profile-header { padding: 30px 20px 20px; background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent); text-align: center; }
+        .profile-avatar-container { position: relative; width: 80px; height: 80px; margin: 0 auto 15px; cursor: pointer; }
+        .profile-avatar { width: 100%; height: 100%; background: var(--surface-card); border-radius: 50%; border: 2px solid var(--primary); display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 0 20px var(--primary-glow); }
+        .avatar-edit-badge { position: absolute; bottom: 0; right: 0; background: var(--primary); color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; border: 2px solid var(--bg-dark); }
+        
+        .profile-stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 0 20px 20px; }
+        .p-stat-box { background: rgba(255,255,255,0.05); padding: 12px 5px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .p-stat-val { font-size: 16px; font-weight: 800; color: white; margin-bottom: 2px;}
+        .p-stat-lbl { font-size: 9px; color: var(--text-sub); }
+
+        .menu-item { background: var(--surface-card); padding: 15px 20px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s;}
+        .menu-item:active { transform: scale(0.98); }
+        .menu-item-left { display: flex; align-items: center; gap: 15px; font-size: 13px; font-weight: 500; }
+        .menu-item i { color: var(--primary); font-size: 16px; width: 20px; text-align: center;}
+        
+        .social-row { display: flex; justify-content: center; gap: 15px; margin: 10px 20px 20px; }
+        .social-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px; color: white; cursor: pointer; transition: 0.3s; }
+        .social-icon.wa { background: #25D366; } .social-icon.ig { background: #E1306C; } .social-icon.dc { background: #5865F2; } .social-icon.tg { background: #0088cc; } .social-icon.yt { background: #FF0000; }
+        
+        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .wallet-box { background: var(--surface-card); margin: 20px; border-radius: 15px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .bal-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center;}
+        .bal-row:last-child { border: none; padding-bottom: 0; }
+        .bal-title { font-size: 13px; color: var(--text-sub); display: flex; align-items: center; gap: 8px;}
+        .bal-amt { font-size: 16px; font-weight: 800; }
+        
+        .quick-amt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .quick-amt-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+        .quick-amt-btn:active { transform: scale(0.95); }
+        .upi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+        .upi-app-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 5px; cursor: pointer; transition: 0.2s; opacity: 0.6;}
+        .upi-app-btn i { font-size: 24px; margin-bottom: 5px; }
+        .upi-app-btn.selected { border-color: var(--primary); background: var(--primary-glow); opacity: 1; box-shadow: 0 0 10px var(--primary-glow); transform: scale(1.05);}
+        .txn-item { background: var(--surface-card); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+
+        /* Modals & Chat */
+        .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 20000; justify-content: center; align-items: flex-end;}
+        .modal-content { background: var(--bg-dark); padding: 25px 20px; border-radius: 25px 25px 0 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.1); max-height: 85vh; overflow-y: auto; animation: slideUpModal 0.3s; display: flex; flex-direction: column;}
+        @keyframes slideUpModal { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .chat-container { display: flex; flex-direction: column; height: 350px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 15px; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { background: var(--surface-card); padding: 8px 12px; border-radius: 12px; width: fit-content; max-width: 85%; font-size: 12px; }
+        .chat-msg.mine { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px;}
+        .chat-msg.other { border-bottom-left-radius: 2px; }
+        .chat-msg .sender { font-size: 9px; color: var(--warning); margin-bottom: 2px; font-weight: bold;}
+        .chat-msg.mine .sender { display: none; }
+        .chat-input-area { display: flex; padding: 10px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); }
+
+        .loader { text-align: center; padding: 30px; color: var(--text-sub); font-size: 13px; }
+        .slot-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .slot-btn { width: 35px; height: 35px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;}
+        .slot-btn.selected { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 0 10px var(--primary-glow); transform: scale(1.1);}
+        .slot-btn.booked { background: rgba(255,51,51,0.2); color: var(--primary-red); border-color: transparent; cursor: not-allowed; opacity: 0.5; }
+        
+        .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
+        .emoji-item { font-size: 35px; text-align: center; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .emoji-item:active { transform: scale(0.9); }
+        .emoji-item.selected { background: var(--primary-glow); border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div id="customToast">Message</div>
+
+    <div id="authScreen">
+        <div class="auth-box" id="loginFormBox">
+            <img id="authLogoImg" src="" style="display:none; max-height:80px; margin: 0 auto 15px;">
+            <div class="auth-logo" id="authLogoText">TNVESPORTS</div>
+            <div class="auth-sub">Welcome back, Gamer!</div>
+            <div class="input-group"><i class="fa-solid fa-envelope"></i><input type="email" id="loginEmail" class="auth-input" placeholder="Email Address"></div>
+            <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" id="loginPass" class="auth-input" placeholder="Password"></div>
+            <button class="btn-main" onclick="loginUser()" id="loginBtn">Login to Battle</button>
+            <div class="auth-switch" onclick="toggleAuth('signup')">Don't have an account? <span>Sign Up</span></div>
+        </div>
+        <div class="auth-box" id="signupFormBox" style="display: none;">
+            <img id="authLogoImg2" src="" style="display:none; max-height:80px; margin: 0 auto 15px;">
+            <div class="auth-logo" id="authLogoText2">Create Account</div>
+            <div class="auth-sub">Join the ultimate esports platform</div>
+            <div class="input-group"><i class="fa-solid fa-gamepad"></i><input type="text" id="regFfName" class="auth-input" placeholder="Free Fire Username"></div>
+            <div class="input-group"><i class="fa-solid fa-envelope"></i><input type="email" id="regEmail" class="auth-input" placeholder="Email Address"></div>
+            <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" id="regPass" class="auth-input" placeholder="Create Password"></div>
+            <div class="input-group"><i class="fa-solid fa-gift"></i><input type="text" id="regRefCode" class="auth-input" placeholder="Referral Code (Optional)"></div>
+            <button class="btn-main" onclick="registerUser()" id="signupBtn">Sign Up</button>
+            <div class="auth-switch" onclick="toggleAuth('login')">Already have an account? <span>Login</span></div>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display: none;">
+        <div class="top-header">
+            <div style="display: flex; align-items: center; gap: 10px;"><img id="headerLogoImg" class="app-logo-img" src="" alt="Logo"><div class="app-logo-text" id="headerLogoText">TNVESPORTS</div></div>
+            <div class="header-actions">
+                <div class="live-view"><i class="fa-solid fa-circle" style="font-size: 6px; animation: fadeIn 1s infinite alternate;"></i> <span id="headerLiveCount">0</span></div>
+                <i class="fa-solid fa-bell" style="font-size: 20px; color: white; cursor: pointer;" onclick="openModal('notificationsModal')"></i>
+                <div class="wallet-pill" onclick="switchTab('Wallet', document.querySelectorAll('.bottom-nav .nav-item')[1])"><i class="fa-solid fa-wallet"></i> ₹<span id="topWalletBal">0</span></div>
+            </div>
+        </div>
+
+        <div id="tab-Home" class="app-section active">
+            <div class="banner-container" id="userBanners"><div class="loader">Loading Banners...</div></div>
+            <div class="section-title" style="margin-top: 0;"><i class="fa-solid fa-clipboard-list"></i> My Matches</div>
+            <div class="match-tabs"><div class="tab-btn active" onclick="filterMyMatches('Upcoming', this)">Upcoming</div><div class="tab-btn" onclick="filterMyMatches('Ongoing', this)">Ongoing</div><div class="tab-btn" onclick="filterMyMatches('Results', this)">Results</div></div>
+            <div id="myMatchesContainer"><div class="loader">Loading Your Matches...</div></div>
+            <div class="section-title"><i class="fa-solid fa-gamepad"></i> Esports Categories</div>
+            <div class="games-grid" id="userGames"></div>
+        </div>
+
+        <div id="categoryMatchesScreen">
+            <div class="top-header" style="background: var(--surface-card);"><div style="display:flex; align-items:center; gap:15px; color:white; font-weight:bold; font-size:16px;"><i class="fa-solid fa-arrow-left" style="cursor:pointer;" onclick="closeCategoryScreen()"></i><span id="catScreenTitle">Category</span></div></div>
+            <div id="catMatchesContainer" style="padding: 20px 0;"><div class="loader">Loading Matches...</div></div>
+        </div>
+
+        <div id="tab-Wallet" class="app-section">
+            <div class="wallet-box" style="margin-top: 20px;">
+                <div class="bal-row"><div class="bal-title"><i class="fa-solid fa-money-bill-wave" style="color:var(--success);"></i> Winning Balance</div><div class="bal-amt" style="color:var(--success);">₹<span id="wWin">0</span></div></div>
+                <div class="bal-row"><div class="bal-title"><i class="fa-solid fa-piggy-bank" style="color:white;"></i> Deposit Balance</div><div class="bal-amt">₹<span id="wDep">0</span></div></div>
+                <div class="bal-row"><div class="bal-title"><i class="fa-solid fa-gift" style="color:var(--primary);"></i> Bonus Balance</div><div class="bal-amt" style="color:var(--primary);">₹<span id="wBon">0</span></div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 20px;">
+                <button class="btn-main" style="background: var(--success);" onclick="openDepositFlow()"><i class="fa-solid fa-plus"></i> Add Cash</button>
+                <button class="btn-outline" style="border-color: rgba(255,255,255,0.2); color:white;" onclick="openModal('withdrawModal')"><i class="fa-solid fa-building-columns"></i> Withdraw</button>
+            </div>
+            <div class="section-title" style="margin-top: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> Transaction History</div>
+            <div id="walletTxnList" style="padding: 0 20px;"><div class="loader">Loading history...</div></div>
+        </div>
+
+        <div id="tab-Leaderboard" class="app-section"><div class="section-title" style="margin-top: 20px;"><i class="fa-solid fa-trophy"></i> Top Players</div><div class="wallet-box" style="padding: 0; overflow: hidden;" id="lbContainer"><div class="loader">Loading...</div></div></div>
+
+        <div id="tab-Refer" class="app-section">
+            <div class="section-title" style="margin-top: 20px;"><i class="fa-solid fa-gift"></i> Refer & Earn</div>
+            <div class="wallet-box" style="text-align: center;">
+                <i class="fa-solid fa-gift" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i><div style="font-size: 14px; margin-bottom: 10px;">Share your code and earn bonus!</div>
+                <div style="background: rgba(255,255,255,0.05); border: 1px dashed var(--primary); padding: 15px; border-radius: 12px; font-family: monospace; font-size: 24px; font-weight: bold; letter-spacing: 2px; color: var(--warning); margin-bottom: 15px;" id="referTabCode">Loading...</div>
+                <div style="display:flex; gap:10px;"><button class="btn-outline" style="flex:1; padding: 10px;" onclick="copyRefCode()"><i class="fa-solid fa-copy"></i> Copy</button><button class="btn-main" style="flex:1; padding: 10px; background:#25D366; color:white; border:none;" onclick="shareOnWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button></div>
+            </div>
+            <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Referral History</div>
+            <div id="referHistoryList" style="padding: 0 20px 20px;"><div class="loader">Loading history...</div></div>
+        </div>
+
+        <div id="tab-Profile" class="app-section">
+            <div class="profile-header">
+                <div class="profile-avatar-container" onclick="openModal('avatarModal')">
+                    <div class="profile-avatar"><span id="pAvatarIcon">👦</span></div>
+                    <div class="avatar-edit-badge"><i class="fa-solid fa-pen"></i></div>
+                </div>
+                <div style="font-size:18px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;" onclick="openModal('nameModal')">
+                    <span id="pName">Gamer</span> <i class="fa-solid fa-pen" style="font-size: 12px; color: var(--primary);"></i>
+                </div>
+                <div style="font-size:12px; color:var(--text-sub);" id="pEmail">Loading...</div>
+                <div style="font-size:11px; margin-top:5px; color:var(--primary);">UID: <span id="pUid">...</span></div>
+            </div>
+
+            <div class="profile-stats-grid">
+                <div class="p-stat-box"><div class="p-stat-val" id="statTotal">0</div><div class="p-stat-lbl">Total Matches</div></div>
+                <div class="p-stat-box"><div class="p-stat-val" id="statPlayed">0</div><div class="p-stat-lbl">Played Matches</div></div>
+                <div class="p-stat-box"><div class="p-stat-val" style="color:var(--success);" id="statWon">0</div><div class="p-stat-lbl">Matches Won</div></div>
+            </div>
+            
+            <div style="padding: 0 20px 20px;">
+                <div style="background:var(--surface-card); padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size: 12px; font-weight: bold; margin-bottom: 10px; color: white;"><i class="fa-solid fa-gift" style="color:var(--primary);"></i> Redeem Gift Code</div>
+                    <div style="display: flex; gap: 0;"><input type="text" id="redeemInput" class="auth-input" placeholder="Enter Code" style="border-radius: 10px 0 0 10px; padding-left: 15px; border-right: none; flex: 1; margin:0;"><button class="btn-main" style="width: 80px; border-radius: 0 10px 10px 0; margin: 0; padding: 12px 0; box-shadow:none;" onclick="applyRedeem()">Apply</button></div>
+                </div>
+
+                <div class="menu-item" onclick="openModal('passwordModal')"><div class="menu-item-left"><i class="fa-solid fa-lock"></i> Change Password</div><i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-sub);"></i></div>
+                <div class="menu-item" style="cursor: default;"><div class="menu-item-left"><i class="fa-solid fa-bell"></i> Notifications</div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotifications()"><span class="slider"></span></label></div>
+                <div class="menu-item" onclick="openPolicyModal('Privacy Policy')"><div class="menu-item-left"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</div><i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-sub);"></i></div>
+                <div class="menu-item" onclick="openPolicyModal('Fair Play Policy')"><div class="menu-item-left"><i class="fa-solid fa-scale-balanced"></i> Fair Play Policy</div><i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--text-sub);"></i></div>
+                <div class="menu-item" onclick="logoutUser()" style="border-color: rgba(255,51,51,0.2);"><div class="menu-item-left" style="color: var(--primary-red);"><i class="fa-solid fa-right-from-bracket" style="color: var(--primary-red);"></i> Logout</div></div>
+            </div>
+
+            <div style="text-align: center; color: var(--text-sub); font-size: 11px; margin-top: 10px;">Follow Us</div>
+            <div class="social-row" id="profileSocials"><div class="loader" style="padding:10px;">Loading links...</div></div>
+            <div style="height: 30px;"></div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('Home', this)"><i class="fa-solid fa-house"></i><span>Home</span></div>
+            <div class="nav-item" onclick="switchTab('Wallet', this)"><i class="fa-solid fa-wallet"></i><span>Wallet</span></div>
+            <div class="nav-item" onclick="switchTab('Leaderboard', this)"><i class="fa-solid fa-trophy"></i><span>Rank</span></div>
+            <div class="nav-item" onclick="switchTab('Refer', this)"><i class="fa-solid fa-users-viewfinder"></i><span>Refer</span></div>
+            <div class="nav-item" onclick="switchTab('Profile', this)"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+        </div>
+        
+        <a href="#" id="floatingWa" class="floating-wa" target="_blank" onclick="handleWaClick(event)"><i class="fa-brands fa-whatsapp"></i></a>
+    </div> 
+
+    <div id="matchModal" class="modal-overlay" style="align-items: center;">
+        <div class="modal-content" style="border-radius: 20px; max-height: 95vh; padding: 0; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; overflow: hidden;">
+            <div id="mModalBanner" style="height: 120px; background: #222; background-size: cover; background-position: center; position: relative; flex-shrink: 0;"><i class="fa-solid fa-circle-xmark" style="position: absolute; top: 15px; right: 15px; font-size: 24px; color: white; cursor: pointer; text-shadow: 0 2px 5px rgba(0,0,0,0.5);" onclick="closeModal('matchModal')"></i></div>
+            <div style="display: flex; background: var(--surface-card); border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;"><div class="tab-btn active" id="mTabDetailsBtn" onclick="switchMatchModalTab('Details')" style="border-radius:0; padding:12px 0; font-size:11px;">Details</div><div class="tab-btn" id="mTabRulesBtn" onclick="switchMatchModalTab('Rules')" style="border-radius:0; padding:12px 0; font-size:11px;">Rules</div><div class="tab-btn" id="mTabChatBtn" onclick="switchMatchModalTab('Chat')" style="border-radius:0; padding:12px 0; font-size:11px; display:none;">Chat <i class="fa-solid fa-lock" style="font-size:9px; color:var(--primary-red);" id="chatLockIcon"></i></div></div>
+            
+            <div id="mTabDetails" style="padding: 20px; overflow-y: auto; flex: 1;">
+                <h3 id="mModalName" style="margin-bottom: 5px; color: var(--primary);">Match Name</h3><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;"><div style="font-size: 12px; color: var(--text-sub);" id="mModalTime">Date & Time</div><div style="font-size: 11px; font-weight: bold; color: var(--warning); display:none;" id="mModalCountdown">Starts in: 00:00:00</div></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;"><div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;"><div style="font-size:10px; color:var(--text-sub);">Entry Fee</div><div style="font-weight:bold; color:white;" id="mModalFee">₹0</div></div><div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;"><div style="font-size:10px; color:var(--text-sub);">Prize Pool</div><div style="font-weight:bold; color:var(--warning);" id="mModalPool">₹0</div></div><div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;"><div style="font-size:10px; color:var(--text-sub);">Per Kill</div><div style="font-weight:bold; color:var(--success);" id="mModalKill">₹0</div></div><div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;"><div style="font-size:10px; color:var(--text-sub);">Map & Type</div><div style="font-weight:bold; color:white;" id="mModalType">Bermuda | Solo</div></div></div>
+                <div id="mModalJoinSection"><div style="font-size: 12px; font-weight: bold; margin-bottom: 5px; color: var(--warning);" id="joinErrorMsg"></div><div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">Enter Game Details</div><input type="text" id="mJoinFfName" class="auth-input" placeholder="Exact Free Fire Name" style="padding: 10px; margin-bottom: 10px;"><input type="number" id="mJoinFfUid" class="auth-input" placeholder="Free Fire UID" style="padding: 10px; margin-bottom: 10px;"><div style="font-size: 12px; font-weight: bold; margin-bottom: 5px; margin-top: 5px;">Select Slot</div><div class="slot-grid" id="mSlotGrid"></div><button class="btn-main" style="margin-top: 15px;" id="mJoinBtn" onclick="confirmJoinMatch()">Confirm Join (₹<span id="mBtnFee">0</span>)</button></div>
+                <div id="mModalRoomSection" style="display: none; background: rgba(0,230,118,0.1); border: 1px dashed var(--success); padding: 15px; border-radius: 10px; text-align: center; margin-top: 15px;"><div style="font-size: 11px; color: var(--success); margin-bottom: 5px; font-weight: bold;">ROOM ID & PASSWORD</div><div style="font-size: 18px; font-family: monospace; font-weight: bold; letter-spacing: 2px; display:flex; justify-content:center; align-items:center; gap:10px;" id="mShowRoomId">ID: -----</div><div style="font-size: 14px; font-family: monospace; color: var(--warning); margin-top: 5px; display:flex; justify-content:center; align-items:center; gap:10px;" id="mShowRoomPass">Pass: -----</div></div>
+            </div>
+            <div id="mTabRules" style="display:none; padding: 20px; overflow-y: auto; flex: 1;"><h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-scroll"></i> Match Rules</h3><div style="font-size: 12px; color: var(--text-sub); line-height: 1.6; white-space: pre-wrap;" id="mModalRules">Rules here...</div></div>
+            <div id="mTabChat" style="display:none; flex: 1; flex-direction: column; overflow: hidden; background: var(--bg-dark);"><div class="chat-messages" id="chatMsgContainer"></div><div class="chat-input-area"><input type="text" id="chatInput" class="auth-input" placeholder="Type a message..." style="border-radius: 20px 0 0 20px; border-right: none;"><button class="btn-main" style="width: auto; padding: 0 20px; border-radius: 0 20px 20px 0; margin: 0;" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button></div></div>
+        </div>
+    </div>
+
+    <div id="depositModal" class="modal-overlay"><div class="modal-content" style="max-height: 90vh;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h3>Add Cash</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeDepositModal()"></i></div><div id="depStep1"><div style="font-size: 12px; color: var(--text-sub); margin-bottom: 10px;">Min Deposit: ₹<span id="depMinAmt">10</span></div><div class="input-group" style="margin-bottom: 20px;"><i class="fa-solid fa-indian-rupee-sign" style="font-size: 20px; color: var(--primary);"></i><input type="number" id="depAmtInput" class="auth-input" style="font-size: 24px; font-weight: bold; padding-left: 50px;" placeholder="0"></div><div style="font-size: 11px; margin-bottom: 10px; color: var(--text-sub);">Quick Amount</div><div class="quick-amt-grid"><div class="quick-amt-btn" onclick="setDepAmt(10)">₹10</div><div class="quick-amt-btn" onclick="setDepAmt(20)">₹20</div><div class="quick-amt-btn" onclick="setDepAmt(30)">₹30</div><div class="quick-amt-btn" onclick="setDepAmt(50)">₹50</div><div class="quick-amt-btn" onclick="setDepAmt(100)">₹100</div><div class="quick-amt-btn" onclick="setDepAmt(500)">₹500</div></div><button class="btn-main" onclick="goToDepositStep2()">Next Step <i class="fa-solid fa-arrow-right"></i></button></div><div id="depStep2" style="display: none;"><div style="text-align: center; margin-bottom: 15px;"><img id="depQrImg" src="" style="width: 150px; border-radius: 10px; display: none; margin: 0 auto 10px;"><div style="font-size: 14px; font-family: monospace; font-weight: bold; color: var(--info); display: flex; justify-content: center; align-items: center; gap: 10px;" id="depUpiText">UPI: ----- <i class="fa-solid fa-copy" style="color: white; cursor: pointer; font-size: 16px;" onclick="copyAdminUpi()"></i></div></div><div style="font-size: 11px; margin-bottom: 10px; color: var(--text-sub); text-align: center;">Select UPI App to Pay ₹<span id="depPayAmt" style="color:var(--success); font-weight:bold; font-size:14px;">0</span></div><div class="upi-grid"><div class="upi-app-btn" onclick="selectUpiApp('phonepe', this)"><i class="fa-solid fa-p" style="color:#5f259f;"></i><span>PhonePe</span></div><div class="upi-app-btn" onclick="selectUpiApp('paytm', this)"><i class="fa-brands fa-paypal" style="color:#00b9f1;"></i><span>Paytm</span></div><div class="upi-app-btn" onclick="selectUpiApp('gpay', this)"><i class="fa-brands fa-google" style="color:#ea4335;"></i><span>GPay</span></div><div class="upi-app-btn" onclick="selectUpiApp('amazon', this)"><i class="fa-brands fa-amazon" style="color:#ff9900;"></i><span>AmazonPay</span></div><div class="upi-app-btn" onclick="selectUpiApp('fampay', this)"><i class="fa-solid fa-f" style="color:#ffad00;"></i><span>FamPay</span></div></div><button class="btn-main" style="background: var(--success); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3);" onclick="triggerUpiPayment()"><i class="fa-solid fa-mobile-screen-button"></i> Tap to Pay</button><div style="border-top: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px;"></div><div style="font-size: 11px; margin-bottom: 5px; color: var(--warning); font-weight: bold;">After payment, enter UTR & Upload Screenshot</div><div class="input-group"><i class="fa-solid fa-hashtag"></i><input type="text" id="depUtrInput" class="auth-input" placeholder="12-Digit UTR Number"></div><div class="input-group"><i class="fa-solid fa-image"></i><input type="file" id="depFileInput" class="auth-input" accept="image/*" style="padding-left: 45px;"></div><div style="display: flex; gap: 10px;"><button class="btn-outline" style="flex: 0.5;" onclick="backToDepositStep1()">Back</button><button class="btn-main" style="flex: 1;" id="depSubmitFinalBtn" onclick="submitFinalDeposit()">Confirm Deposit</button></div></div></div></div>
+    
+    <div id="withdrawModal" class="modal-overlay"><div class="modal-content"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h3>Withdraw Winnings</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('withdrawModal')"></i></div><div style="font-size: 12px; color: var(--warning); margin-bottom: 15px; background: rgba(255,170,0,0.1); padding: 10px; border-radius: 8px;">Available Winnings: ₹<span id="widAvailBal" style="font-weight:bold;">0</span><br>Limits: ₹<span id="widMin">50</span> to ₹<span id="widMax">5000</span></div><div class="input-group"><i class="fa-solid fa-indian-rupee-sign"></i><input type="number" id="widAmt" class="auth-input" placeholder="Withdraw Amount"></div><div class="input-group"><i class="fa-solid fa-mobile"></i><input type="text" id="widUpi" class="auth-input" placeholder="UPI ID or PhonePe Number"></div><div class="input-group"><i class="fa-solid fa-user"></i><input type="text" id="widName" class="auth-input" placeholder="Account Holder Name"></div><button class="btn-main" id="widSubmitBtn" onclick="submitWithdraw()">Request Withdraw</button></div></div>
+    
+    <div id="avatarModal" class="modal-overlay"><div class="modal-content"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><h3>Choose Avatar</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('avatarModal')"></i></div><div class="emoji-grid"><div class="emoji-item" onclick="saveAvatar('👦', this)">👦</div><div class="emoji-item" onclick="saveAvatar('👧', this)">👧</div><div class="emoji-item" onclick="saveAvatar('👨‍🎤', this)">👨‍🎤</div><div class="emoji-item" onclick="saveAvatar('👩‍🎤', this)">👩‍🎤</div><div class="emoji-item" onclick="saveAvatar('🦸‍♂️', this)">🦸‍♂️</div><div class="emoji-item" onclick="saveAvatar('🥷', this)">🥷</div><div class="emoji-item" onclick="saveAvatar('🧟‍♂️', this)">🧟‍♂️</div><div class="emoji-item" onclick="saveAvatar('👾', this)">👾</div></div><button class="btn-main" style="margin-top: 20px;" onclick="closeModal('avatarModal')">Done</button></div></div>
+    
+    <div id="nameModal" class="modal-overlay"><div class="modal-content"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><h3>Edit Username</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('nameModal')"></i></div><div class="input-group"><i class="fa-solid fa-user"></i><input type="text" id="editNameInput" class="auth-input" placeholder="New Free Fire Name"></div><button class="btn-main" onclick="saveNewName()">Save Changes</button></div></div>
+
+    <div id="passwordModal" class="modal-overlay"><div class="modal-content"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><h3>Change Password</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('passwordModal')"></i></div><div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" id="newPassInput" class="auth-input" placeholder="Enter New Password"></div><button class="btn-main" onclick="saveNewPassword()">Update Password</button></div></div>
+
+    <div id="policyModal" class="modal-overlay"><div class="modal-content" style="max-height: 90vh;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;"><h3 id="policyTitle">Policy</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('policyModal')"></i></div><div style="font-size: 12px; color: var(--text-sub); line-height: 1.6; white-space: pre-wrap;" id="policyContent">Content loading...</div></div></div>
+
+    <div id="notificationsModal" class="modal-overlay"><div class="modal-content" style="max-height: 90vh;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h3>Notifications</h3><i class="fa-solid fa-xmark" style="font-size:20px; cursor:pointer;" onclick="closeModal('notificationsModal')"></i></div><div id="notifListContainer" style="display: flex; flex-direction: column; gap: 10px;"><div class="loader">Loading Alerts...</div></div></div></div>
+
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyDHw-6OuMhCax6GPdTKUpfHPlHP8F1RdkA", authDomain: "tnvesports-be595.firebaseapp.com", databaseURL: "https://tnvesports-be595-default-rtdb.firebaseio.com", projectId: "tnvesports-be595", storageBucket: "tnvesports-be595.firebasestorage.app" };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const auth = firebase.auth(); const db = firebase.firestore(); const storage = firebase.storage();
+
+        window.currentUser = null; window.userData = null; window.appSettings = {}; window.appSocials = {}; window.allTournaments = []; window.selectedMatch = null; window.selectedSlot = null; let chatUnsubscribe = null; let countdownInterval = null; window.selectedUpiApp = 'upi'; window.notifsEnabled = true;
+
+        // CUSTOM TOAST (Replaces Alert)
+        function showToast(msg, isError = false) { const toast = document.getElementById('customToast'); toast.innerText = msg; toast.style.background = isError ? "var(--primary-red)" : "var(--success)"; toast.style.display = 'block'; setTimeout(() => { toast.style.display = 'none'; }, 3500); }
+        window.alert = function(msg) { showToast(msg, false); }; 
+
+        window.openModal = (id) => { document.getElementById(id).style.display = 'flex'; };
+        window.closeModal = (id) => { document.getElementById(id).style.display = 'none'; if(id === 'matchModal') { if(chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; } if(countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; } document.getElementById('joinErrorMsg').innerText = ""; } };
+        window.copyToClipboard = (text) => { navigator.clipboard.writeText(text).then(() => { showToast("Copied: " + text); }).catch(e => { showToast("Failed to copy", true); }); };
+        window.copyRefCode = () => { window.copyToClipboard(window.userData?.myReferralCode || "N/A"); };
+        window.copyAdminUpi = () => { window.copyToClipboard(window.appSettings?.upiId || ""); };
+
+        // TABS SWITCHING
+        window.switchTab = (tabId, element) => {
+            if(element) { document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active')); element.classList.add('active'); }
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active')); document.getElementById('tab-' + tabId).classList.add('active'); window.scrollTo(0,0);
+            if(tabId === 'Home') loadHomeData(); if(tabId === 'Leaderboard') loadLeaderboard(); if(tabId === 'Wallet') loadUserTransactions(); if(tabId === 'Refer') loadReferralHistory(); if(tabId === 'Profile') renderSocials();
+        };
+
+        window.handleWaClick = (e) => { if(!window.appSettings?.whatsapp) { e.preventDefault(); showToast("Admin has not set WhatsApp number yet!", true); } };
+
+        // APP BOOT & CONFIG (LOGO SYNC INCLUDED)
+        async function fetchAppConfig() {
+            try {
+                const themeSnap = await db.collection("settings").doc("theme").get();
+                if(themeSnap.exists && themeSnap.data().activeTheme) { const theme = themeSnap.data().activeTheme; const root = document.documentElement; if(theme === 'blue') { root.style.setProperty('--primary', '#00c6ff'); root.style.setProperty('--primary-glow', 'rgba(0, 198, 255, 0.3)'); } else if(theme === 'green') { root.style.setProperty('--primary', '#00e676'); root.style.setProperty('--primary-glow', 'rgba(0, 230, 118, 0.3)'); } else { root.style.setProperty('--primary', '#ff3333'); root.style.setProperty('--primary-glow', 'rgba(255, 51, 51, 0.3)'); } }
+                
+                const genSnap = await db.collection("settings").doc("general").get();
+                if(genSnap.exists) {
+                    window.appSettings = genSnap.data(); const d = window.appSettings;
+                    if(d.appName) { 
+                        document.getElementById('authLogoText').innerText = d.appName; document.getElementById('authLogoText2').innerText = d.appName;
+                        document.getElementById('headerLogoText').innerText = d.appName; document.title = d.appName; 
+                    }
+                    if(d.logoUrl) { 
+                        document.getElementById('headerLogoImg').src = d.logoUrl; document.getElementById('headerLogoImg').style.display = 'block'; document.getElementById('headerLogoText').style.display = 'none'; 
+                        document.getElementById('authLogoImg').src = d.logoUrl; document.getElementById('authLogoImg').style.display = 'block'; document.getElementById('authLogoText').style.display = 'none';
+                        document.getElementById('authLogoImg2').src = d.logoUrl; document.getElementById('authLogoImg2').style.display = 'block'; document.getElementById('authLogoText2').style.display = 'none';
+                    }
+                    if(d.whatsapp && d.whatsapp.toString().trim() !== "") {
+                        let waNum = d.whatsapp.toString().trim(); if(waNum.length === 10) waNum = "91" + waNum;
+                        document.getElementById('floatingWa').href = `https://wa.me/${waNum}?text=${encodeURIComponent("Hi Sir, I am a player on TNVESPORTS. I need some support.")}`;
+                        document.getElementById('floatingWa').style.display = 'flex';
+                    }
+                }
+                const widSnap = await db.collection("settings").doc("withdrawLimits").get(); if(widSnap.exists) { window.appSettings.widMin = widSnap.data().min; window.appSettings.widMax = widSnap.data().max; }
+                const socSnap = await db.collection("settings").doc("socials").get(); if(socSnap.exists) { window.appSocials = socSnap.data(); }
+                db.collection("settings").doc("liveStats").onSnapshot((docSnap) => { if (docSnap.exists) document.getElementById('headerLiveCount').innerText = docSnap.data().activeCount || 0; });
+            } catch(e) {}
+        }
+        fetchAppConfig();
+
+        // AUTHENTICATION
+        window.toggleAuth = (type) => { document.getElementById('loginFormBox').style.display = type === 'signup' ? 'none' : 'block'; document.getElementById('signupFormBox').style.display = type === 'signup' ? 'block' : 'none'; };
+        
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                window.currentUser = user; document.getElementById('authScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
+                await loadUserProfile(user.uid); loadHomeData(); loadNotifications(); loadUserTransactions(); loadReferralHistory(); renderSocials();
+                try { await db.collection("settings").doc("liveStats").update({ activeCount: firebase.firestore.FieldValue.increment(1) }); } catch(e){} 
+                if(window.appSettings?.whatsapp) { let wn = window.appSettings.whatsapp.toString().trim(); if(wn.length===10) wn="91"+wn; document.getElementById('floatingWa').href = `https://wa.me/${wn}?text=${encodeURIComponent("Hi Sir, my UID is: " + user.uid.substring(0,8).toUpperCase())}`; }
+            } else {
+                if(window.currentUser) { try { await db.collection("settings").doc("liveStats").update({ activeCount: firebase.firestore.FieldValue.increment(-1) }); } catch(e){} }
+                window.currentUser = null; window.userData = null; document.getElementById('mainApp').style.display = 'none'; document.getElementById('authScreen').style.display = 'flex';
+            }
+        });
+
+        window.logoutUser = async () => { if(confirm("Logout from App?")) await auth.signOut(); };
+
+        window.registerUser = async () => {
+            const btn = document.getElementById('signupBtn'); const ffName = document.getElementById('regFfName').value.trim(); const email = document.getElementById('regEmail').value.trim(); const pass = document.getElementById('regPass').value; const refCode = document.getElementById('regRefCode').value.trim();
+            if(!ffName || !email || !pass) return showToast("Fill required fields!", true);
+            btn.innerText = "Creating..."; btn.disabled = true;
+            try {
+                let signupBonus = window.appSettings?.signupBonus || 0;
+                const cred = await auth.createUserWithEmailAndPassword(email, pass); const uid = cred.user.uid; const myRef = "TNV" + Math.floor(Math.random()*9000 + 1000); 
+                await db.collection("users").doc(uid).set({ ffName: ffName, email: email, wallets: { winning: 0, deposit: 0, bonus: signupBonus }, status: "Active", myReferralCode: myRef, avatar: "👦", notifOn: true, createdAt: new Date() });
+                if(refCode) { const refSnap = await db.collection("users").where("myReferralCode", "==", refCode).get(); if(!refSnap.empty) { const referrer = refSnap.docs[0]; await db.collection("referrals").add({ referrerUid: referrer.id, referrerName: referrer.data().ffName, referrerEmail: referrer.data().email, refereeUid: uid, refereeName: ffName, refereeEmail: email, code: refCode, status: 'Pending', createdAt: new Date() }); } }
+            } catch (e) { showToast(e.message, true); }
+            btn.innerText = "Sign Up"; btn.disabled = false;
+        };
+
+        window.loginUser = async () => {
+            const btn = document.getElementById('loginBtn'); const email = document.getElementById('loginEmail').value.trim(); const pass = document.getElementById('loginPass').value;
+            if(!email || !pass) return showToast("Enter credentials!", true);
+            btn.innerText = "Loading..."; btn.disabled = true;
+            try { await auth.signInWithEmailAndPassword(email, pass); } catch (e) { showToast("Login Failed! Check Email/Password.", true); }
+            btn.innerText = "Login to Battle"; btn.disabled = false;
+        };
+
+        // PROFILE DATA
+        async function loadUserProfile(uid) {
+            try {
+                const s = await db.collection("users").doc(uid).get();
+                if(s.exists) {
+                    window.userData = s.data();
+                    if(window.userData.status === 'Blocked') { showToast("Account Blocked by Admin.", true); await auth.signOut(); return; }
+                    const win = window.userData.wallets?.winning || 0; const dep = window.userData.wallets?.deposit || 0; const bon = window.userData.wallets?.bonus || 0; const tot = win + dep + bon;
+                    document.getElementById('topWalletBal').innerText = tot; document.getElementById('wWin').innerText = win; document.getElementById('wDep').innerText = dep; document.getElementById('wBon').innerText = bon;
+                    document.getElementById('pName').innerText = window.userData.ffName; document.getElementById('pEmail').innerText = window.userData.email; document.getElementById('pUid').innerText = uid.substring(0,8).toUpperCase(); 
+                    document.getElementById('referTabCode').innerText = window.userData.myReferralCode || "N/A"; document.getElementById('pAvatarIcon').innerText = window.userData.avatar || "👦"; document.getElementById('editNameInput').value = window.userData.ffName;
+                    window.notifsEnabled = window.userData.notifOn !== false; document.getElementById('notifToggle').checked = window.notifsEnabled; calculateProfileStats();
+                }
+            } catch(e) {}
+        }
+
+        function calculateProfileStats() {
+            if(!window.currentUser || !window.allTournaments) return; const uid = window.currentUser.uid;
+            const joined = window.allTournaments.filter(m => m.joinedUsers && m.joinedUsers.some(u => u.userDocId === uid)); const played = joined.filter(m => m.status === 'Results').length; const won = (window.userData.wallets?.winning > 0 && played > 0) ? Math.ceil(played / 3) : 0; 
+            document.getElementById('statTotal').innerText = joined.length; document.getElementById('statPlayed').innerText = played; document.getElementById('statWon').innerText = won;
+        }
+
+        // PROFILE EDITS & POLICIES
+        window.saveAvatar = async (emoji, el) => { document.querySelectorAll('.emoji-item').forEach(e => e.classList.remove('selected')); el.classList.add('selected'); try { await db.collection("users").doc(window.currentUser.uid).update({ avatar: emoji }); document.getElementById('pAvatarIcon').innerText = emoji; showToast("Avatar Updated!"); closeModal('avatarModal'); } catch(e) { showToast("Error", true); } };
+        window.saveNewName = async () => { const newName = document.getElementById('editNameInput').value.trim(); if(!newName) return showToast("Enter Name", true); try { await db.collection("users").doc(window.currentUser.uid).update({ ffName: newName }); document.getElementById('pName').innerText = newName; window.userData.ffName = newName; showToast("Username Updated!"); closeModal('nameModal'); } catch(e) { showToast("Error", true); } };
+        window.saveNewPassword = async () => { const newPass = document.getElementById('newPassInput').value; if(newPass.length < 6) return showToast("Password must be 6+ chars", true); try { await window.currentUser.updatePassword(newPass); showToast("Password Updated Successfully!"); closeModal('passwordModal'); document.getElementById('newPassInput').value = ''; } catch(e) { showToast("Error: Logout and login again to change password.", true); } };
+        window.toggleNotifications = async () => { const isChecked = document.getElementById('notifToggle').checked; window.notifsEnabled = isChecked; try { await db.collection("users").doc(window.currentUser.uid).update({ notifOn: isChecked }); showToast(isChecked ? "Notifications ON" : "Notifications OFF"); } catch(e) {} };
+        window.openPolicyModal = (type) => { document.getElementById('policyTitle').innerText = type; let content = "Policy not configured by admin yet."; if(window.appSettings) { if(type === 'Privacy Policy' && window.appSettings.privacyPolicy) content = window.appSettings.privacyPolicy; if(type === 'Fair Play Policy' && window.appSettings.fairPlayPolicy) content = window.appSettings.fairPlayPolicy; } if(content.startsWith("http")) { document.getElementById('policyContent').innerHTML = `<a href="${content}" target="_blank" style="color:var(--info);">Click here to view ${type}</a>`; } else { document.getElementById('policyContent').innerText = content; } openModal('policyModal'); };
+        function renderSocials() { const c = document.getElementById('profileSocials'); if(!window.appSocials || Object.keys(window.appSocials).length === 0) { c.innerHTML = "<div class='loader' style='padding:10px;'>No links configured.</div>"; return; } const d = window.appSocials; let h = ''; if(d.whatsapp) h += `<div class="social-icon wa" onclick="window.open('${d.whatsapp}', '_blank')"><i class="fa-brands fa-whatsapp"></i></div>`; if(d.instagram) h += `<div class="social-icon ig" onclick="window.open('${d.instagram}', '_blank')"><i class="fa-brands fa-instagram"></i></div>`; if(d.discord) h += `<div class="social-icon dc" onclick="window.open('${d.discord}', '_blank')"><i class="fa-brands fa-discord"></i></div>`; if(d.telegram) h += `<div class="social-icon tg" onclick="window.open('${d.telegram}', '_blank')"><i class="fa-brands fa-telegram"></i></div>`; if(d.youtube) h += `<div class="social-icon yt" onclick="window.open('${d.youtube}', '_blank')"><i class="fa-brands fa-youtube"></i></div>`; c.innerHTML = h; }
+
+        // HOME DATA
+        async function loadHomeData() {
+            try { const bSnap = await db.collection("admin_banners").get(); let bHtml = ''; bSnap.forEach(d => { const x = d.data(); const c = x.link ? `onclick="window.open('${x.link}', '_blank')"` : ''; bHtml += `<div class="banner-card" style="background-image: url('${x.url}')" ${c}></div>`; }); document.getElementById('userBanners').innerHTML = bHtml || '<div style="color:gray;">No banners</div>'; } catch(e){}
+            try { const gSnap = await db.collection("admin_games").get(); let gHtml = ''; gSnap.forEach(d => { const x = d.data(); gHtml += `<div class="game-card" onclick="openCategory('${x.name}')"><div class="game-img" style="background-image: url('${x.url}')"></div><div class="game-name">${x.name}</div></div>`; }); document.getElementById('userGames').innerHTML = gHtml || '<div style="color:gray; grid-column:span 2;">No games</div>'; } catch(e){}
+            try { const tSnap = await db.collection("tournaments").get(); window.allTournaments = []; tSnap.forEach(d => { window.allTournaments.push({ id: d.id, ...d.data() }); }); filterMyMatches('Upcoming', document.querySelector('.match-tabs .tab-btn.active')); calculateProfileStats(); } catch(e) {}
+        }
+
+        window.filterMyMatches = (status, btn) => {
+            document.querySelectorAll('.match-tabs .tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); const container = document.getElementById('myMatchesContainer');
+            const myMatches = window.allTournaments.filter(m => m.status === status && m.joinedUsers && m.joinedUsers.some(u => u.userDocId === window.currentUser.uid)); let h = '';
+            myMatches.forEach(m => { const isResult = status === 'Results'; const btnText = isResult ? 'VIEW WINNINGS' : 'VIEW DETAILS'; h += `<div class="match-card"><div class="match-header"><div class="match-title">${m.name} <span style="font-size:10px; color:var(--text-sub);">(${m.type})</span></div><div class="match-time">${new Date(m.time).toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</div></div><div class="match-stats"><div class="stat-box"><div class="stat-val" style="color:var(--warning);">₹${m.pool}</div><div class="stat-lbl">Prize Pool</div></div><div class="stat-box"><div class="stat-val" style="color:var(--success);">₹${m.perKill || 0}</div><div class="stat-lbl">Per Kill</div></div></div><div class="match-footer" style="justify-content: ${isResult ? 'center' : 'space-between'};">${isResult ? '' : `<div class="spots-text"><span style="color:var(--success)">JOINED</span></div>`}<button class="btn-join" style="background:#444;" onclick="openMatchDetails('${m.id}')">${btnText}</button></div></div>`; });
+            container.innerHTML = h || `<div style="text-align:center; color:var(--text-sub); padding:20px; font-size:12px;">No ${status} matches joined.</div>`;
+        };
+
+        window.openCategory = (catName) => {
+            document.getElementById('catScreenTitle').innerText = catName; const container = document.getElementById('catMatchesContainer');
+            const catMatches = window.allTournaments.filter(m => m.category === catName && m.status !== 'Results' && m.status !== 'Cancelled'); let h = '';
+            catMatches.forEach(m => { const spotsLeft = m.max - (m.joinedUsers ? m.joinedUsers.length : 0); const progressPercent = m.joinedUsers ? (m.joinedUsers.length / m.max) * 100 : 0; const isJoined = m.joinedUsers ? m.joinedUsers.some(u => u.userDocId === window.currentUser.uid) : false; const btnText = isJoined ? 'VIEW DETAILS' : 'JOIN NOW'; const btnBg = isJoined ? '#444' : 'var(--primary)'; h += `<div class="match-card"><div class="match-header"><div class="match-title">${m.name} <span style="font-size:10px; color:var(--text-sub);">(${m.type})</span></div><div class="match-time">${new Date(m.time).toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</div></div><div class="match-stats"><div class="stat-box"><div class="stat-val" style="color:var(--warning);">₹${m.pool}</div><div class="stat-lbl">Prize Pool</div></div><div class="stat-box"><div class="stat-val" style="color:var(--success);">₹${m.perKill || 0}</div><div class="stat-lbl">Per Kill</div></div><div class="stat-box"><div class="stat-val">₹${m.fee}</div><div class="stat-lbl">Entry Fee</div></div></div><div class="match-footer"><div><div class="spots-text"><span style="color:${spotsLeft>0?'var(--success)':'var(--primary-red)'}">${spotsLeft}</span> spots left</div><div class="progress-container"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div></div><button class="btn-join" style="background:${btnBg};" onclick="openMatchDetails('${m.id}')">${btnText}</button></div></div>`; });
+            container.innerHTML = h || `<div style="text-align:center; color:var(--text-sub); padding:40px; font-size:14px;">No upcoming matches here.</div>`; document.getElementById('categoryMatchesScreen').style.display = 'block';
+        };
+        window.closeCategoryScreen = () => { document.getElementById('categoryMatchesScreen').style.display = 'none'; };
+
+        // MATCH DETAILS
+        window.switchMatchModalTab = (tab) => { const m = window.selectedMatch; if(tab === 'Chat' && m) { const isJoined = m.joinedUsers ? m.joinedUsers.some(u => u.userDocId === window.currentUser.uid) : false; if(!isJoined) return showToast("Only players who joined can access Chat!", true); } ['Details', 'Rules', 'Chat'].forEach(t => { document.getElementById(`mTab${t}Btn`).classList.remove('active'); document.getElementById(`mTab${t}`).style.display = 'none'; }); document.getElementById(`mTab${tab}Btn`).classList.add('active'); document.getElementById(`mTab${tab}`).style.display = tab === 'Chat' ? 'flex' : 'block'; if(tab === 'Chat') loadMatchChat(m.id); };
+
+        window.openMatchDetails = (mId) => {
+            const m = window.allTournaments.find(x => x.id === mId); if(!m) return; window.selectedMatch = m; window.selectedSlot = null; document.getElementById('joinErrorMsg').innerText = ""; 
+            ['Details', 'Rules', 'Chat'].forEach(t => { document.getElementById(`mTab${t}Btn`).classList.remove('active'); document.getElementById(`mTab${t}`).style.display = 'none'; }); document.getElementById('mTabDetailsBtn').classList.add('active'); document.getElementById('mTabDetails').style.display = 'block';
+            document.getElementById('mModalName').innerText = m.name; document.getElementById('mModalTime').innerText = new Date(m.time).toLocaleString(); document.getElementById('mModalFee').innerText = "₹" + m.fee; document.getElementById('mModalPool').innerText = "₹" + m.pool; document.getElementById('mModalKill').innerText = "₹" + (m.perKill || 0); document.getElementById('mModalType').innerText = `${m.map} | ${m.type}`; document.getElementById('mModalRules').innerText = m.rules || "No specific rules provided by Admin."; if(m.banner) { document.getElementById('mModalBanner').style.backgroundImage = `url('${m.banner}')`; } else { document.getElementById('mModalBanner').style.backgroundImage = "none"; }
+            let isJoined = false; let mySlot = null; if(m.joinedUsers) { const me = m.joinedUsers.find(u => u.userDocId === window.currentUser.uid); if(me) { isJoined = true; mySlot = me.slot; } }
+            const joinSec = document.getElementById('mModalJoinSection'); const roomSec = document.getElementById('mModalRoomSection'); const chatBtn = document.getElementById('mTabChatBtn'); const cdEl = document.getElementById('mModalCountdown');
+
+            if(countdownInterval) clearInterval(countdownInterval);
+            if(m.status === 'Upcoming') { cdEl.style.display = 'block'; const mTime = new Date(m.time).getTime(); countdownInterval = setInterval(() => { const now = new Date().getTime(); const distance = mTime - now; if(distance < 0) { cdEl.innerText = "Match Started!"; clearInterval(countdownInterval); } else { const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const min = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); const sec = Math.floor((distance % (1000 * 60)) / 1000); cdEl.innerText = `Starts in: ${h}h ${min}m ${sec}s`; } }, 1000); } else { cdEl.style.display = 'none'; }
+
+            if(m.status === 'Upcoming' && !isJoined) { joinSec.style.display = 'block'; roomSec.style.display = 'none'; chatBtn.style.display = 'block'; document.getElementById('chatLockIcon').style.display = 'inline-block'; document.getElementById('mBtnFee').innerText = m.fee; let sHtml = ''; for(let i=1; i<=m.max; i++) { const isTaken = m.joinedUsers ? m.joinedUsers.some(u => Number(u.slot) === i) : false; sHtml += `<div class="slot-btn ${isTaken?'booked':''}" onclick="selectSlot(${i}, this)">${i}</div>`; } document.getElementById('mSlotGrid').innerHTML = sHtml; } else { joinSec.style.display = 'none'; if(isJoined) { chatBtn.style.display = 'block'; document.getElementById('chatLockIcon').style.display = 'none'; roomSec.style.display = 'block'; if(m.publishRoom && m.roomId) { document.getElementById('mShowRoomId').innerHTML = `ID: ${m.roomId} <i class="fa-solid fa-copy" style="cursor:pointer; color:white;" onclick="copyToClipboard('${m.roomId}')"></i>`; document.getElementById('mShowRoomPass').innerHTML = `Pass: ${m.roomPass} <i class="fa-solid fa-copy" style="cursor:pointer; color:white;" onclick="copyToClipboard('${m.roomPass}')"></i>`; } else { document.getElementById('mShowRoomId').innerText = `You joined Slot #${mySlot}`; document.getElementById('mShowRoomPass').innerText = "ID & Pass will be updated here."; } } else { chatBtn.style.display = 'none'; roomSec.style.display = 'none'; } if(m.status === 'Results') { roomSec.style.display = 'block'; document.getElementById('mShowRoomId').innerText = "Match Finished!"; document.getElementById('mShowRoomPass').innerText = "Check your Winning Wallet for prizes."; } }
+            openModal('matchModal');
+        };
+
+        window.selectSlot = (num, el) => { if(el.classList.contains('booked')) return; document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); window.selectedSlot = num; };
+        window.confirmJoinMatch = async () => {
+            const m = window.selectedMatch; const fName = document.getElementById('mJoinFfName').value.trim(); const fUid = document.getElementById('mJoinFfUid').value.trim(); const errEl = document.getElementById('joinErrorMsg');
+            if(!fName || !fUid || !window.selectedSlot) { errEl.innerText = "Error: Select slot & fill details."; return; }
+            const fee = Number(m.fee); const wWin = Number(window.userData.wallets?.winning || 0); const wDep = Number(window.userData.wallets?.deposit || 0); const wBon = Number(window.userData.wallets?.bonus || 0);
+            if((wWin + wDep + wBon) < fee) { errEl.innerText = `Error: Insufficient Balance. Please add money.`; setTimeout(() => { closeModal('matchModal'); closeCategoryScreen(); switchTab('Wallet', document.querySelectorAll('.bottom-nav .nav-item')[1]); }, 2500); return; }
+            const btn = document.getElementById('mJoinBtn'); btn.innerText = "Joining..."; btn.disabled = true; errEl.innerText = "";
+            try {
+                let newDep = wDep, newWin = wWin, newBon = wBon; let remFee = fee;
+                if(newDep >= remFee) { newDep -= remFee; remFee = 0; } else { remFee -= newDep; newDep = 0; }
+                if(remFee > 0 && newWin >= remFee) { newWin -= remFee; remFee = 0; } else if (remFee > 0) { remFee -= newWin; newWin = 0; }
+                if(remFee > 0 && newBon >= remFee) { newBon -= remFee; remFee = 0; }
+                await db.collection("users").doc(window.currentUser.uid).update({ "wallets.deposit": newDep, "wallets.winning": newWin, "wallets.bonus": newBon });
+                const newPlayer = { userDocId: window.currentUser.uid, ffName: fName, ffUid: fUid, slot: window.selectedSlot, joinedAt: new Date().toISOString() };
+                const updatedUsers = m.joinedUsers ? [...m.joinedUsers, newPlayer] : [newPlayer];
+                await db.collection("tournaments").doc(m.id).update({ joinedUsers: updatedUsers });
+                await db.collection("transactions").add({ userId: window.currentUser.uid, type: "Match Entry", desc: `Joined ${m.name} (Slot ${window.selectedSlot})`, amount: fee, status: "Success", date: new Date() });
+                showToast("Successfully Joined!"); closeModal('matchModal'); await loadUserProfile(window.currentUser.uid); await loadHomeData(); if(document.getElementById('categoryMatchesScreen').style.display === 'block') openCategory(document.getElementById('catScreenTitle').innerText);
+            } catch(e) { errEl.innerText = "Network Error! Failed to join."; }
+            btn.innerText = `Confirm Join (₹${fee})`; btn.disabled = false;
+        };
+
+        function loadMatchChat(matchId) { const container = document.getElementById('chatMsgContainer'); if(chatUnsubscribe) chatUnsubscribe(); chatUnsubscribe = db.collection("tournaments").doc(matchId).collection("chat").orderBy("timestamp", "asc").onSnapshot((snap) => { let h = ''; snap.forEach(d => { const c = d.data(); const isMe = c.uid === window.currentUser.uid; const cClass = isMe ? 'mine' : 'other'; h += `<div class="chat-msg ${cClass}"><div class="sender">${c.name}</div><div>${c.text}</div></div>`; }); container.innerHTML = h || `<div style="text-align:center; color:var(--text-sub); font-size:11px; margin-top:20px;">Welcome to match chat! Say Hi.</div>`; container.scrollTop = container.scrollHeight; }); }
+        window.sendChatMessage = async () => { const input = document.getElementById('chatInput'); const text = input.value.trim(); if(!text || !window.selectedMatch) return; try { await db.collection("tournaments").doc(window.selectedMatch.id).collection("chat").add({ uid: window.currentUser.uid, name: window.userData.ffName, text: text, timestamp: new Date() }); input.value = ''; } catch(e) {} };
+
+        // LEADERBOARD
+        async function loadLeaderboard() { const container = document.getElementById('lbContainer'); try { const snap = await db.collection("users").orderBy("wallets.winning", "desc").limit(10).get(); let h = ''; let rank = 1; snap.forEach(d => { const x = d.data(); let rc = rank===1 ? '#ffd700' : (rank===2 ? '#c0c0c0' : (rank===3 ? '#cd7f32' : 'white')); h += `<div class="bal-row" style="align-items:center; padding:15px 20px;"><div style="display:flex; gap:15px; align-items:center;"><div style="font-size:20px; font-weight:900; color:${rc}; width:25px; text-align:center;">#${rank}</div><div><div style="font-weight:bold; font-size:14px; color:white;">${x.ffName || 'Player'}</div></div></div><div style="font-weight:900; color:var(--warning); font-size:16px;">₹${x.wallets?.winning||0}</div></div>`; rank++; }); container.innerHTML = h || "<div style='text-align:center; padding:20px; color:gray;'>No data</div>"; } catch(e) { container.innerHTML = "<div class='loader'>Error loading leaderboard</div>"; } }
+
+        // REFER & EARN
+        window.shareOnWhatsApp = () => { const code = window.userData?.myReferralCode || ""; const link = "https://tnvesports.web.app"; const msg = `Hey! Download TNVESPORTS and play tournaments with me. Use my Referral Code: *${code}* to get a signup bonus! Download here: ${link}`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); };
+        async function loadReferralHistory() { const container = document.getElementById('referHistoryList'); container.innerHTML = "<div class='loader'>Loading history...</div>"; try { const snap = await db.collection("referrals").where("referrerUid", "==", window.currentUser.uid).get(); let h = ''; snap.forEach(d => { const x = d.data(); const sc = x.status === 'Approved' ? 'var(--success)' : (x.status === 'Pending' ? 'var(--warning)' : 'var(--primary-red)'); h += `<div class="txn-item" style="background:rgba(0,0,0,0.2);"><div><div style="font-weight:bold; font-size:13px; color:white;">${x.refereeName}</div></div><div style="text-align:right;"><div style="font-size:12px; color:${sc}; font-weight:bold;">${x.status}</div></div></div>`; }); container.innerHTML = h || "<div class='loader'>You haven't referred anyone yet.</div>"; } catch(e) { container.innerHTML = "<div class='loader'>Error loading referrals.</div>"; } }
+
+        // WALLET: DEPOSIT, WITHDRAW, TXN HISTORY FIX
+        window.openDepositFlow = () => { if(window.appSettings) { document.getElementById('depMinAmt').innerText = window.appSettings.minDeposit || 10; document.getElementById('depUpiText').innerHTML = `UPI: ${window.appSettings.upiId || "Not Set"} <i class="fa-solid fa-copy" style="color: white; cursor: pointer; font-size: 16px;" onclick="copyAdminUpi()"></i>`; if(window.appSettings.qrUrl) { document.getElementById('depQrImg').src = window.appSettings.qrUrl; document.getElementById('depQrImg').style.display = 'block'; } } document.getElementById('depStep1').style.display = 'block'; document.getElementById('depStep2').style.display = 'none'; document.getElementById('depAmtInput').value = ''; window.selectedUpiApp = 'upi'; document.querySelectorAll('.upi-app-btn').forEach(b => b.classList.remove('selected')); openModal('depositModal'); };
+        window.closeDepositModal = () => { closeModal('depositModal'); };
+        window.setDepAmt = (amt) => { document.getElementById('depAmtInput').value = amt; };
+        window.goToDepositStep2 = () => { const amt = Number(document.getElementById('depAmtInput').value); const min = window.appSettings?.minDeposit || 10; if(!amt || amt < min) return showToast(`Minimum deposit is ₹${min}`, true); document.getElementById('depPayAmt').innerText = amt; document.getElementById('depStep1').style.display = 'none'; document.getElementById('depStep2').style.display = 'block'; };
+        window.backToDepositStep1 = () => { document.getElementById('depStep2').style.display = 'none'; document.getElementById('depStep1').style.display = 'block'; };
+        window.selectUpiApp = (appId, el) => { document.querySelectorAll('.upi-app-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); window.selectedUpiApp = appId; };
+        window.triggerUpiPayment = () => { const amt = document.getElementById('depAmtInput').value; const upiId = window.appSettings?.upiId; const appName = window.appSettings?.appName || "TNVESPORTS"; if(!upiId) return showToast("Admin has not set UPI ID yet.", true); let intentPrefix = 'upi://pay'; if(window.selectedUpiApp === 'phonepe') intentPrefix = 'phonepe://pay'; else if(window.selectedUpiApp === 'paytm') intentPrefix = 'paytmmp://pay'; else if(window.selectedUpiApp === 'gpay') intentPrefix = 'tez://upi/pay'; else if(window.selectedUpiApp === 'amazon') intentPrefix = 'amazonpay://pay'; window.location.href = `${intentPrefix}?pa=${upiId}&pn=${encodeURIComponent(appName)}&am=${amt}&cu=INR`; };
+        window.submitFinalDeposit = async () => { const amt = Number(document.getElementById('depAmtInput').value); const file = document.getElementById('depFileInput').files[0]; const utr = document.getElementById('depUtrInput').value.trim(); if(!file && !utr) return showToast("Provide Screenshot OR UTR number.", true); const btn = document.getElementById('depSubmitFinalBtn'); btn.innerText = "Submitting..."; btn.disabled = true; try { let proof = utr; let type = 'UTR'; if(file) { const fileRef = storage.ref().child('user_deposits/' + Date.now() + '_' + file.name); await fileRef.put(file); proof = await fileRef.getDownloadURL(); type = 'Screenshot'; } await db.collection("deposits").add({ userId: window.currentUser.uid, userEmail: window.userData.email, amount: amt, type: type, proofUrl: proof, status: 'Pending', createdAt: new Date() }); await db.collection("transactions").add({ userId: window.currentUser.uid, type: "Deposit Req", desc: `Via ${type}`, amount: amt, status: "Pending", date: new Date() }); showToast("Deposit Request Sent to Admin!"); closeDepositModal(); loadUserTransactions(); } catch(e) { showToast("Error submitting request", true); } btn.innerText = "Confirm Deposit"; btn.disabled = false; };
+        document.getElementById('withdrawModal').addEventListener('DOMNodeInserted', () => { document.getElementById('widAvailBal').innerText = window.userData?.wallets?.winning || 0; document.getElementById('widMin').innerText = window.appSettings?.widMin || 50; document.getElementById('widMax').innerText = window.appSettings?.widMax || 5000; });
+        window.submitWithdraw = async () => { const amt = Number(document.getElementById('widAmt').value); const upi = document.getElementById('widUpi').value; const name = document.getElementById('widName').value; const winBal = Number(window.userData.wallets?.winning || 0); const min = Number(window.appSettings?.widMin || 50); const max = Number(window.appSettings?.widMax || 5000); if(!amt || amt < min || amt > max) return showToast(`Amount must be between ₹${min} and ₹${max}`, true); if(amt > winBal) return showToast("Insufficient Winning Balance!", true); if(!upi || !name) return showToast("Fill details.", true); const btn = document.getElementById('widSubmitBtn'); btn.innerText = "Processing..."; btn.disabled = true; try { await db.collection("users").doc(window.currentUser.uid).update({ "wallets.winning": firebase.firestore.FieldValue.increment(-amt) }); await db.collection("withdrawals").add({ userId: window.currentUser.uid, userEmail: window.userData.email, amount: amt, upiId: upi, accountName: name, status: 'Pending', createdAt: new Date() }); await db.collection("transactions").add({ userId: window.currentUser.uid, type: "Withdraw Req", desc: `To ${upi}`, amount: amt, status: "Pending", date: new Date() }); showToast("Withdraw Request Placed!"); closeModal('withdrawModal'); loadUserProfile(window.currentUser.uid); loadUserTransactions(); } catch(e) { showToast("Error", true); } btn.innerText = "Request Withdraw"; btn.disabled = false; };
+        window.applyRedeem = async () => { const code = document.getElementById('redeemInput').value.trim(); if(!code) return showToast("Enter code", true); try { const snap = await db.collection("redeem_codes").where("code", "==", code).where("status", "==", "Active").get(); if(snap.empty) return showToast("Invalid or Used Code!", true); const docId = snap.docs[0].id; const amt = snap.docs[0].data().amount; await db.collection("users").doc(window.currentUser.uid).update({ "wallets.bonus": firebase.firestore.FieldValue.increment(amt) }); await db.collection("redeem_codes").doc(docId).update({ status: 'Used by ' + window.userData.ffName }); await db.collection("transactions").add({ userId: window.currentUser.uid, type: "Redeem Code", desc: code, amount: amt, status: "Success", date: new Date() }); showToast(`₹${amt} added to Bonus Wallet!`); document.getElementById('redeemInput').value = ''; loadUserProfile(window.currentUser.uid); loadUserTransactions(); } catch(e) { showToast("Error applying code", true); } };
+
+        // FIXED TXN HISTORY (Using JS Sort to avoid Firebase Index Error)
+        async function loadUserTransactions() {
+            const container = document.getElementById('walletTxnList');
+            try {
+                const snap = await db.collection("transactions").where("userId", "==", window.currentUser.uid).get(); 
+                let txns = []; snap.forEach(d => txns.push(d.data()));
+                txns.sort((a,b) => b.date.toMillis() - a.date.toMillis()); // Sort descending in JS
+                
+                let h = '';
+                txns.forEach(x => {
+                    const ds = x.date.toDate().toLocaleString([], {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}); 
+                    const sc = x.status === 'Success'?'var(--success)':(x.status==='Pending'?'var(--warning)':'var(--primary-red)'); 
+                    h += `<div class="txn-item"><div><div style="font-weight:bold; font-size:13px; color:white;">${x.type}</div><div style="font-size:10px; color:var(--text-sub);">${x.desc} <br> ${ds}</div></div><div style="text-align:right;"><div style="font-weight:bold; font-size:14px; color:white;">₹${x.amount}</div><div style="font-size:10px; color:${sc}; font-weight:bold;">${x.status}</div></div></div>`; 
+                });
+                container.innerHTML = h || "<div class='loader'>No transactions found.</div>";
+            } catch(e) { container.innerHTML = "Error loading history"; }
+        }
+
+        async function loadNotifications() { const container = document.getElementById('notifListContainer'); try { const snap = await db.collection("notifications").orderBy("createdAt", "desc").limit(20).get(); let h = ''; snap.forEach(d => { const x = d.data(); if(window.notifsEnabled && (x.targetUser === 'All' || x.targetUser.toLowerCase() === window.userData.ffName.toLowerCase())) { let eH = ''; if(x.category === 'Redeem' && x.code) { eH = `<div style="background: rgba(0,230,118,0.1); padding: 8px; border-radius: 8px; border: 1px dashed var(--success); display: flex; justify-content: space-between; align-items: center; margin-top: 10px;"><span style="font-family:monospace; color:var(--warning); font-weight:bold;">${x.code}</span><button class="btn-main" style="width:auto; padding:5px 10px; font-size:10px; margin:0;" onclick="copyToClipboard('${x.code}')"><i class="fa-solid fa-copy"></i> Copy</button></div>`; } h += `<div style="background:var(--surface-card); padding:15px; border-radius:12px; border:1px solid rgba(255,255,255,0.05); margin-bottom:10px;"><div style="font-weight:bold; color:var(--primary); font-size:13px; margin-bottom:5px;">${x.title}</div><div style="font-size:11px; color:var(--text-sub);">${x.body}</div>${eH}</div>`; } }); container.innerHTML = h || `<div style="text-align:center; color:var(--text-sub); font-size:12px;">No new notifications.</div>`; } catch(e) {} }
+
+    </script>
+</body>
+</html/>
