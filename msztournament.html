@@ -1,1 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSZ TOURNAMENTS  - Play FF Tournaments & Win Cash</title>
+    <meta name="description" content="Download MSZ TOURNAMENTS , the best Free Fire Tournament app. Play matches, get Booyah, and win real cash rewards instantly!">
+    
+    <!-- Google Fonts for Gaming Vibe -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        gaming: ['Teko', 'sans-serif'],
+                        body: ['Rajdhani', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF5722',
+                            yellow: '#FFC107',
+                            dark: '#0f0f13',
+                            card: '#1a1a24',
+                            neon: '#ff3b3b'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to bottom, rgba(15, 15, 19, 0.9), rgba(15, 15, 19, 1)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
 
+    <!-- Custom CSS for Animations and Effects -->
+    <style>
+        :root {
+            --neon-color: #ff3b3b;
+            --neon-glow: 0 0 10px #ff3b3b, 0 0 20px #ff3b3b, 0 0 40px #ff3b3b;
+        }
+
+        body {
+            background-color: #0f0f13;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF5722;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff3b3b;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 87, 34, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 87, 34, 0.9), 0 0 50px rgba(255, 87, 34, 0.6); }
+            100% { box-shadow: 0 0 10px rgba(255, 87, 34, 0.5); }
+        }
+        .btn-glow {
+            animation: pulse-glow 2s infinite;
+            transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+            transform: scale(1.05);
+            animation: none;
+            box-shadow: 0 0 30px #FF5722;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal-left { opacity: 0; }
+        .reveal-left.active { animation: slideInLeft 0.8s ease forwards; }
+        
+        .reveal-right { opacity: 0; }
+        .reveal-right.active { animation: slideInRight 0.8s ease forwards; }
+
+        .reveal-up { opacity: 0; }
+        .reveal-up.active { animation: slideInUp 0.8s ease forwards; }
+
+        /* Hexagon Clip Path for Image */
+        .hex-shape {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            padding: 5px;
+            background: linear-gradient(45deg, #FF5722, #FFC107);
+        }
+        .hex-inner {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background-color: #0f0f13;
+        }
+
+        /* Glassmorphism */
+        .glass-nav {
+            background: rgba(15, 15, 19, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(26, 26, 36, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 87, 34, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 87, 34, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 87, 34, 0.15);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, #FFC107, #FF5722, #ff3b3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Particle Canvas */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-body text-gray-300 antialiased selection:bg-brand-orange selection:text-white relative">
+
+    <!-- Canvas for background particles -->
+    <canvas id="particles-js"></canvas>
+
+    <!-- Header / Navbar -->
+    <header class="fixed w-full top-0 z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <div class="w-12 h-12 rounded-xl overflow-hidden border-2 border-brand-orange shadow-[0_0_15px_rgba(255,87,34,0.5)]">
+                        <img src="https://www.image2url.com/r2/default/images/1778418309409-10c8b7e5-2bcd-43b4-b1b7-e78ac4ec4a1a.jpg" alt="MSZ TOURNAMENTS  Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-gaming text-3xl font-bold tracking-wider text-white"> MSZ  <span class="text-brand-orange"> TOURNAMENTS </span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-white hover:text-brand-orange font-semibold text-lg transition-colors">Home</a>
+                    <a href="#features" class="text-white hover:text-brand-orange font-semibold text-lg transition-colors">Features</a>
+                    <a href="#matches" class="text-white hover:text-brand-orange font-semibold text-lg transition-colors">Matches</a>
+                    <a href="#how-to-play" class="text-white hover:text-brand-orange font-semibold text-lg transition-colors">How to Play</a>
+                    <a href="#faq" class="text-white hover:text-brand-orange font-semibold text-lg transition-colors">FAQ</a>
+                </nav>
+
+                <!-- Download Button Desktop -->
+                <div class="hidden md:flex">
+                    <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="bg-gradient-to-r from-brand-orange to-brand-neon text-white font-bold py-2.5 px-6 rounded-full flex items-center gap-2 btn-glow font-gaming text-xl tracking-wide">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        DOWNLOAD APK
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-brand-orange focus:outline-none">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-t border-gray-800 absolute w-full left-0 top-20 shadow-2xl transition-all duration-300">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col items-center">
+                <a href="#home" class="mobile-link block w-full text-center px-3 py-3 text-white hover:bg-brand-card hover:text-brand-orange rounded-md font-semibold text-lg">Home</a>
+                <a href="#features" class="mobile-link block w-full text-center px-3 py-3 text-white hover:bg-brand-card hover:text-brand-orange rounded-md font-semibold text-lg">Features</a>
+                <a href="#matches" class="mobile-link block w-full text-center px-3 py-3 text-white hover:bg-brand-card hover:text-brand-orange rounded-md font-semibold text-lg">Matches</a>
+                <a href="#how-to-play" class="mobile-link block w-full text-center px-3 py-3 text-white hover:bg-brand-card hover:text-brand-orange rounded-md font-semibold text-lg">How to Play</a>
+                <a href="#faq" class="mobile-link block w-full text-center px-3 py-3 text-white hover:bg-brand-card hover:text-brand-orange rounded-md font-semibold text-lg">FAQ</a>
+                <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="mt-4 block w-[80%] text-center bg-gradient-to-r from-brand-orange to-brand-neon text-white font-bold py-3 px-6 rounded-full btn-glow font-gaming text-xl">
+                    DOWNLOAD NOW
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 bg-hero-pattern bg-cover bg-center bg-no-repeat min-h-screen flex items-center z-10">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-dark/80 via-brand-dark/90 to-brand-dark z-0"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Text Content -->
+                <div class="text-center lg:text-left reveal-left">
+                    <div class="inline-block px-4 py-1.5 rounded-full border border-brand-orange bg-brand-orange/10 text-brand-orange font-bold text-sm mb-6 uppercase tracking-widest flex items-center justify-center lg:justify-start gap-2 w-max mx-auto lg:mx-0">
+                        <span class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+                        India's #1 FF Esports Platform
+                    </div>
+                    
+                    <h1 class="font-gaming text-6xl sm:text-7xl lg:text-8xl font-bold leading-none mb-6 text-white uppercase drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                        Conquer <br class="hidden lg:block"> The <span class="text-gradient">Battleground</span>
+                    </h1>
+                    
+                    <p class="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                        Join daily Free Fire Custom Rooms, compete with pro players, get Booyah, and instantly withdraw real cash directly to your UPI, Paytm, or Bank account!
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="bg-gradient-to-r from-brand-orange to-brand-neon text-white font-bold py-4 px-8 rounded-full flex items-center justify-center gap-3 btn-glow font-gaming text-2xl tracking-widest uppercase hover:scale-105 transition-transform">
+                            <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download For Android
+                        </a>
+                        <a href="#how-to-play" class="bg-transparent border-2 border-gray-600 text-white hover:border-brand-orange hover:text-brand-orange font-bold py-4 px-8 rounded-full flex items-center justify-center gap-2 font-gaming text-2xl tracking-widest uppercase transition-all">
+                            How it works
+                        </a>
+                    </div>
+                    
+                    <div class="mt-8 flex items-center justify-center lg:justify-start gap-6 text-sm text-gray-400 font-semibold">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            100% Safe & Secure
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Instant Withdrawal
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- App Mockup / Logo Display -->
+                <div class="relative mt-12 lg:mt-0 flex justify-center reveal-right">
+                    <!-- Glowing Background Effect -->
+                    <div class="absolute inset-0 bg-brand-orange opacity-20 blur-[100px] rounded-full w-3/4 h-3/4 m-auto"></div>
+                    
+                    <!-- Floating App Logo Main Display -->
+                    <div class="relative z-10 animate-float w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96">
+                        <div class="hex-shape w-full h-full p-1.5 shadow-[0_0_50px_rgba(255,87,34,0.4)]">
+                            <div class="hex-inner w-full h-full flex items-center justify-center overflow-hidden bg-brand-dark">
+                                <img src="https://www.image2url.com/r2/default/images/1778418309409-10c8b7e5-2bcd-43b4-b1b7-e78ac4ec4a1a.jpg" alt="MSZ TOURNAMENTS  App Logo" class="w-[98%] h-[98%] object-cover opacity-90 hover:opacity-100 hover:scale-110 transition-all duration-500 rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <!-- Floating badges -->
+                        <div class="absolute -top-4 -right-4 bg-brand-card border border-brand-orange px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce" style="animation-duration: 3s;">
+                            <span class="text-xl font-gaming text-brand-orange font-bold">10K+</span>
+                            <span class="text-xs font-bold text-gray-300 leading-tight">Active<br>Players</span>
+                        </div>
+                        <div class="absolute -bottom-6 -left-6 bg-brand-card border border-brand-yellow px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 animate-bounce" style="animation-duration: 4s;">
+                            <span class="text-xl font-gaming text-brand-yellow font-bold">₹1L+</span>
+                            <span class="text-xs font-bold text-gray-300 leading-tight">Daily<br>Winnings</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Bottom Divider -->
+        <div class="absolute bottom-0 w-full h-24 bg-gradient-to-t from-brand-dark to-transparent z-10"></div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-10 bg-brand-dark border-b border-gray-800 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-gray-800">
+                <div class="reveal-up" style="animation-delay: 0.1s;">
+                    <div class="font-gaming text-4xl sm:text-5xl font-bold text-white mb-1 counter" data-target="10000">0</div>
+                    <div class="text-brand-orange font-bold uppercase tracking-wider text-sm">Downloads</div>
+                </div>
+                <div class="reveal-up" style="animation-delay: 0.2s;">
+                    <div class="font-gaming text-4xl sm:text-5xl font-bold text-white mb-1 counter" data-target="500">0</div>
+                    <div class="text-brand-orange font-bold uppercase tracking-wider text-sm">Daily Matches</div>
+                </div>
+                <div class="reveal-up" style="animation-delay: 0.3s;">
+                    <div class="font-gaming text-4xl sm:text-5xl font-bold text-white mb-1"><span class="counter" data-target="50">0</span>L+</div>
+                    <div class="text-brand-orange font-bold uppercase tracking-wider text-sm">Prizes Won</div>
+                </div>
+                <div class="reveal-up" style="animation-delay: 0.4s;">
+                    <div class="font-gaming text-4xl sm:text-5xl font-bold text-white mb-1">4.8</div>
+                    <div class="text-brand-orange font-bold uppercase tracking-wider text-sm">App Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-[#0a0a0d] relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-gaming text-5xl md:text-6xl font-bold text-white mb-4 uppercase">Why Choose <span class="text-gradient">MSZ TOURNAMENTS </span>?</h2>
+                <div class="w-24 h-1 bg-brand-orange mx-auto mb-6 rounded-full"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">We provide the most seamless and rewarding esports tournament experience in India.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-brand-orange/20 rounded-xl flex items-center justify-center mb-6 border border-brand-orange/50">
+                        <svg class="w-8 h-8 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">Instant Withdrawals</h3>
+                    <p class="text-gray-400">Won a match? Get your winnings instantly transferred to your UPI, Paytm Wallet, or Bank Account. No waiting time, no hidden charges!</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-brand-yellow/20 rounded-xl flex items-center justify-center mb-6 border border-brand-yellow/50">
+                        <svg class="w-8 h-8 text-brand-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">Anti-Hack System</h3>
+                    <p class="text-gray-400">Fair play is our priority. Our strict moderator team and automated anti-cheat systems ensure that hackers are banned immediately.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.3s;">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6 border border-blue-500/50">
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">24/7 Custom Rooms</h3>
+                    <p class="text-gray-400">Bored at 2 AM? No worries. We host daily matches including CS Ranked, Full Map, Solo, Duo, and Squad matches round the clock.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.4s;">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-6 border border-green-500/50">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">Low Entry Fee</h3>
+                    <p class="text-gray-400">Start your esports journey with entry fees as low as ₹10. Win huge prize pools and per-kill rewards in every match.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.5s;">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-6 border border-purple-500/50">
+                        <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">Customer Support</h3>
+                    <p class="text-gray-400">Got an issue with a match result or wallet? Our dedicated WhatsApp and In-App support team is available to solve it quickly.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="glass-card p-8 rounded-2xl reveal-up" style="animation-delay: 0.6s;">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center mb-6 border border-pink-500/50">
+                        <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3 font-gaming tracking-wide text-3xl">Refer & Earn</h3>
+                    <p class="text-gray-400">Invite your squad! Earn bonus cash directly into your wallet every time your friend joins their first paid match.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Preview / Matches Section -->
+    <section id="matches" class="py-24 bg-brand-dark relative z-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-gaming text-5xl md:text-6xl font-bold text-white mb-4 uppercase">Live <span class="text-gradient">Tournaments</span></h2>
+                <div class="w-24 h-1 bg-brand-orange mx-auto mb-6 rounded-full"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Check out the type of premium matches you can play every day.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Match Card 1 -->
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-gray-800 hover:border-brand-orange transition-all duration-300 reveal-left">
+                    <div class="relative h-48 bg-[url('https://images.unsplash.com/photo-1552820728-8b83bb6b773f?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center">
+                        <div class="absolute inset-0 bg-black/50"></div>
+                        <div class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider animate-pulse flex items-center gap-1">
+                            <span class="w-2 h-2 bg-white rounded-full"></span> Live
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="font-gaming text-3xl text-white font-bold tracking-wide">Bermuda Full Map</h3>
+                            <p class="text-sm text-gray-300">Squad • TPP • Mobile Only</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800">
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Prize Pool</p>
+                                <p class="text-brand-yellow font-gaming text-3xl font-bold">₹1000</p>
+                            </div>
+                            <div class="text-center border-l border-r border-gray-800 px-4">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Per Kill</p>
+                                <p class="text-brand-orange font-gaming text-3xl font-bold">₹10</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Entry</p>
+                                <p class="text-white font-gaming text-3xl font-bold">₹20</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-6 text-sm font-semibold">
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                35/48 Joined
+                            </span>
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                                Today, 8:00 PM
+                            </span>
+                        </div>
+                        <button class="w-full bg-gray-800 hover:bg-brand-orange text-white font-gaming text-2xl py-2 rounded transition-colors uppercase tracking-widest">
+                            Download to Join
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Match Card 2 -->
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-gray-800 hover:border-brand-orange transition-all duration-300 reveal-up">
+                    <div class="relative h-48 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center">
+                        <div class="absolute inset-0 bg-black/50"></div>
+                        <div class="absolute top-4 left-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded uppercase tracking-wider flex items-center gap-1">
+                            Upcoming
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="font-gaming text-3xl text-white font-bold tracking-wide">Clash Squad (CS)</h3>
+                            <p class="text-sm text-gray-300">4v4 • TPP • Emulator Blocked</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800">
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Prize Pool</p>
+                                <p class="text-brand-yellow font-gaming text-3xl font-bold">₹400</p>
+                            </div>
+                            <div class="text-center border-l border-r border-gray-800 px-4">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Type</p>
+                                <p class="text-brand-orange font-gaming text-3xl font-bold">Booyah</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Entry</p>
+                                <p class="text-white font-gaming text-3xl font-bold">₹50</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-6 text-sm font-semibold">
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                6/8 Joined
+                            </span>
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                                Today, 10:00 PM
+                            </span>
+                        </div>
+                        <button class="w-full bg-gray-800 hover:bg-brand-orange text-white font-gaming text-2xl py-2 rounded transition-colors uppercase tracking-widest">
+                            Download to Join
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Match Card 3 -->
+                <div class="bg-brand-card rounded-2xl overflow-hidden border border-gray-800 hover:border-brand-orange transition-all duration-300 reveal-right">
+                    <div class="relative h-48 bg-[url('https://images.unsplash.com/photo-1614145121029-83a9f7b68bf4?q=80&w=1974&auto=format&fit=crop')] bg-cover bg-center">
+                        <div class="absolute inset-0 bg-black/50"></div>
+                        <div class="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider flex items-center gap-1">
+                            Free Match
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="font-gaming text-3xl text-white font-bold tracking-wide">Lone Wolf</h3>
+                            <p class="text-sm text-gray-300">Solo • 1v1 • Gun King</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-800">
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Prize Pool</p>
+                                <p class="text-brand-yellow font-gaming text-3xl font-bold">₹50</p>
+                            </div>
+                            <div class="text-center border-l border-r border-gray-800 px-4">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Per Kill</p>
+                                <p class="text-brand-orange font-gaming text-3xl font-bold">₹0</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Entry</p>
+                                <p class="text-green-500 font-gaming text-3xl font-bold">FREE</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-6 text-sm font-semibold">
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                0/2 Joined
+                            </span>
+                            <span class="text-gray-400 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                                Tomorrow, 10 AM
+                            </span>
+                        </div>
+                        <button class="w-full bg-gray-800 hover:bg-brand-orange text-white font-gaming text-2xl py-2 rounded transition-colors uppercase tracking-widest">
+                            Download to Join
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-12 text-center reveal-up">
+                <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="inline-block bg-transparent border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-white font-bold py-3 px-8 rounded-full font-gaming text-2xl tracking-widest uppercase transition-all">
+                    View All Matches In App
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-to-play" class="py-24 bg-[#0a0a0d] border-t border-b border-gray-800 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-gaming text-5xl md:text-6xl font-bold text-white mb-4 uppercase">How To <span class="text-gradient">Play & Earn</span></h2>
+                <div class="w-24 h-1 bg-brand-orange mx-auto mb-6 rounded-full"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Four simple steps to turn your gaming skills into real money.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-800 -translate-y-1/2 z-0"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 text-center reveal-up" style="animation-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-card border-2 border-brand-orange rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,87,34,0.3)]">
+                        <span class="font-gaming text-4xl text-white font-bold">1</span>
+                    </div>
+                    <h3 class="font-gaming text-3xl text-white font-bold mb-2">Download App</h3>
+                    <p class="text-gray-400 text-sm px-4">Get the MSZ TOURNAMENTS  APK, install it on your android device, and register an account.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="relative z-10 text-center reveal-up" style="animation-delay: 0.3s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-card border-2 border-brand-yellow rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,193,7,0.3)]">
+                        <span class="font-gaming text-4xl text-white font-bold">2</span>
+                    </div>
+                    <h3 class="font-gaming text-3xl text-white font-bold mb-2">Join Match</h3>
+                    <p class="text-gray-400 text-sm px-4">Add money to your wallet, select a tournament, and click join by paying the entry fee.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="relative z-10 text-center reveal-up" style="animation-delay: 0.5s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-card border-2 border-brand-neon rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,59,59,0.3)]">
+                        <span class="font-gaming text-4xl text-white font-bold">3</span>
+                    </div>
+                    <h3 class="font-gaming text-3xl text-white font-bold mb-2">Play & Get Booyah</h3>
+                    <p class="text-gray-400 text-sm px-4">Get Room ID & Password 10 mins before match. Enter Free Fire, join custom room, and play.</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="relative z-10 text-center reveal-up" style="animation-delay: 0.7s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-card border-2 border-green-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                        <span class="font-gaming text-4xl text-white font-bold">4</span>
+                    </div>
+                    <h3 class="font-gaming text-3xl text-white font-bold mb-2">Withdraw Cash</h3>
+                    <p class="text-gray-400 text-sm px-4">Winnings are instantly added to your app wallet. Withdraw to UPI or Bank anytime!</p>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center reveal-up" style="animation-delay: 0.9s;">
+                <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="inline-flex bg-gradient-to-r from-brand-orange to-brand-neon text-white font-bold py-4 px-10 rounded-full items-center gap-3 btn-glow font-gaming text-3xl tracking-widest uppercase">
+                    START PLAYING NOW
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-brand-dark relative z-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="font-gaming text-5xl md:text-6xl font-bold text-white mb-4 uppercase">Frequently Asked <span class="text-gradient">Questions</span></h2>
+                <div class="w-24 h-1 bg-brand-orange mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="space-y-4 reveal-up">
+                <!-- FAQ 1 -->
+                <div class="bg-brand-card border border-gray-800 rounded-lg overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-lg text-white">Is MSZ TOURNAMENTS  Safe to download and use?</span>
+                        <svg class="w-6 h-6 text-brand-orange transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-400 text-sm leading-relaxed">
+                        Yes, absolutely! The app is 100% safe and virus-free. Since real money gaming apps are not allowed on Google Play Store policies in some regions, we provide the APK directly via MediaFire. Over 10,000+ players trust and use our platform daily.
+                    </div>
+                </div>
+                
+                <!-- FAQ 2 -->
+                <div class="bg-brand-card border border-gray-800 rounded-lg overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-lg text-white">How do I get the Room ID and Password?</span>
+                        <svg class="w-6 h-6 text-brand-orange transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-400 text-sm leading-relaxed">
+                        Once you join a tournament, open the app 10 to 15 minutes before the match start time. Go to the "Joined" section in the app, click on your match, and you will see the Room ID and Password updated there.
+                    </div>
+                </div>
+                
+                <!-- FAQ 3 -->
+                <div class="bg-brand-card border border-gray-800 rounded-lg overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-lg text-white">What is the minimum withdrawal amount?</span>
+                        <svg class="w-6 h-6 text-brand-orange transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-400 text-sm leading-relaxed">
+                        The minimum withdrawal limit is just ₹50. Once your winning balance reaches ₹50, you can instantly withdraw it to your registered UPI ID or Paytm wallet.
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-brand-card border border-gray-800 rounded-lg overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none">
+                        <span class="font-bold text-lg text-white">What happens if a hacker joins the room?</span>
+                        <svg class="w-6 h-6 text-brand-orange transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-4 text-gray-400 text-sm leading-relaxed">
+                        We have a strict Zero Tolerance Policy against hackers and teamers. Our moderators spectate the matches live. If anyone is caught hacking, they are permanently banned, their wallet balance is seized, and the affected legitimate players are compensated.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="py-16 bg-gradient-to-r from-brand-orange to-brand-neon relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-gaming text-5xl md:text-7xl font-bold text-white mb-6 uppercase drop-shadow-md">Ready for the Booyah?</h2>
+            <p class="text-white/90 text-xl font-medium mb-10 max-w-2xl mx-auto">Join the biggest Free Fire community today. Download the app, participate in tournaments, and start earning real cash!</p>
+            <a href="https://www.mediafire.com/file/ee0lf8meux7dkc8/MSZ+TOURNAMENTS+.apk/file" target="_blank" class="inline-flex bg-white text-brand-orange hover:bg-gray-100 font-bold py-4 px-12 rounded-full items-center gap-3 shadow-2xl font-gaming text-3xl tracking-widest uppercase transition-transform hover:scale-105">
+                <img src="https://www.image2url.com/r2/default/images/1778418309409-10c8b7e5-2bcd-43b4-b1b7-e78ac4ec4a1a.jpg" class="w-8 h-8 rounded-md" alt="Logo">
+                DOWNLOAD ALPHA BATTEL
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#050508] pt-16 pb-8 border-t border-gray-800 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <!-- Brand Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://www.image2url.com/r2/default/images/1778418309409-10c8b7e5-2bcd-43b4-b1b7-e78ac4ec4a1a.jpg" alt="MSZ TOURNAMENTS  Logo" class="w-10 h-10 rounded-lg">
+                        <span class="font-gaming text-3xl font-bold text-white tracking-wider">ALPHA <span class="text-brand-orange">BATTEL</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 max-w-md">
+                        MSZ TOURNAMENTS  is India's ultimate eSports platform specifically designed for Free Fire players. Compete in daily custom rooms, showcase your skills, and earn real cash rewards instantly.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-orange transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-orange transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center text-gray-400 hover:text-white hover:bg-brand-orange transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider font-gaming text-2xl">Quick Links</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#home" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-orange"></span> Home</a></li>
+                        <li><a href="#features" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-orange"></span> Features</a></li>
+                        <li><a href="#matches" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-orange"></span> Tournaments</a></li>
+                        <li><a href="#how-to-play" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-orange"></span> How to Play</a></li>
+                        <li><a href="#faq" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-brand-orange"></span> FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal / Support -->
+                <div>
+                    <h4 class="text-white font-bold mb-6 uppercase tracking-wider font-gaming text-2xl">Legal & Support</h4>
+                    <ul class="space-y-3 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-gray-600"></span> Contact Us</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-gray-600"></span> Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-gray-600"></span> Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-brand-orange transition-colors flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-gray-600"></span> Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-medium">
+                <p>&copy; 2026 MSZ TOURNAMENTS  Esports. All rights reserved.</p>
+                <p>Disclaimer: This app is not affiliated with, endorsed, or sponsored by Garena Free Fire.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                });
+            });
+
+            // Navbar Background Change on Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-lg', 'bg-brand-dark/95');
+                    navbar.classList.remove('bg-transparent');
+                } else {
+                    navbar.classList.remove('shadow-lg', 'bg-brand-dark/95');
+                    navbar.classList.add('glass-nav');
+                }
+            });
+
+            // Scroll Reveal Animation using Intersection Observer
+            const revealElements = document.querySelectorAll('.reveal-left, .reveal-right, .reveal-up');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            // Counter Animation
+            const counters = document.querySelectorAll('.counter');
+            let counterAnimated = false;
+
+            const animateCounters = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting && !counterAnimated) {
+                        counterAnimated = true;
+                        counters.forEach(counter => {
+                            const updateCount = () => {
+                                const target = +counter.getAttribute('data-target');
+                                const count = +counter.innerText;
+                                const inc = target / 100;
+
+                                if (count < target) {
+                                    counter.innerText = Math.ceil(count + inc);
+                                    setTimeout(updateCount, 20);
+                                } else {
+                                    counter.innerText = target;
+                                }
+                            };
+                            updateCount();
+                        });
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            const statsSection = document.querySelector('.grid-cols-2.md\\:grid-cols-4');
+            if(statsSection) animateCounters.observe(statsSection);
+
+            // FAQ Accordion
+            const faqBtns = document.querySelectorAll('.faq-btn');
+            faqBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.faq-icon');
+                    
+                    // Close others
+                    faqBtns.forEach(otherBtn => {
+                        if (otherBtn !== this) {
+                            otherBtn.nextElementSibling.classList.add('hidden');
+                            otherBtn.querySelector('.faq-icon').classList.remove('rotate-180');
+                        }
+                    });
+
+                    // Toggle current
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+            // Simple Particle System Implementation
+            const canvas = document.getElementById('particles-js');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particlesArray =[];
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = Math.random() > 0.5 ? '#FF5722' : '#FFC107';
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                    if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                particlesArray =[];
+                for (let i = 0; i < 50; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+
+            initParticles();
+            animateParticles();
+        });
+    </script>
+</body>
+  </html>
